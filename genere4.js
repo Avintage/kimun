@@ -27,8 +27,8 @@ async function getGenre(url){
 
         //const descripcion = $("#data-info-libro > div > div > div.descripcionBreve.margin-top-20 > div").text();
         //const descripcion = $("div.font-weight-light:nth-child(3)").text() +"\n"+ `Autor: $("#metadata-autor > a").text()` +"\n"+ `Editorial: $("#metadata-editorial > a").text()`;
-        const descripcion = $("div.font-weight-light:nth-child(3)").text() + "\n" +
-                   "Autor: " + $("#metadata-autor > a").text() + "\n" +
+        const descripcion = $("div.font-weight-light:nth-child(3)").text() + " " +
+                   "Autor: " + $("#metadata-autor > a").text() + " " +
                    "Editorial: " + $("#metadata-editorial > a").text();
 
         const Autor = $("#metadata-autor > a").text();
