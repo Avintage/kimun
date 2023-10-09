@@ -3,7 +3,6 @@ const axios = require("axios");
 const readline = require("readline");
 const fs = require("fs");
 const createCsvWriter = require('csv-writer').createObjectCsvWriter;
-//const sharp = require("sharp");
 
 const data_producto = [];
 
@@ -25,8 +24,6 @@ async function getGenre(url){
         const response = await axios.get(url);
         const $ = cheerio.load(response.data);
 
-        //const descripcion = $("#data-info-libro > div > div > div.descripcionBreve.margin-top-20 > div").text();
-        //const descripcion = $("div.font-weight-light:nth-child(3)").text() +"\n"+ `Autor: $("#metadata-autor > a").text()` +"\n"+ `Editorial: $("#metadata-editorial > a").text()`;
         const descripcion = $("div.font-weight-light:nth-child(3)").text() + " " +
                    "Autor: " + $("#metadata-autor > a").text() + " " +
                    "Editorial: " + $("#metadata-editorial > a").text();
@@ -38,8 +35,6 @@ async function getGenre(url){
         const isb = $("#metadata-isbn13").text();
         const cleanedIsb = parseInt(isb, 10);
 
-        //const autorFormato = `Autor: ${Autor}`;
-        //const editorFormato = `Editorial: ${Editorial}`;
 
         data_producto.push({descripcion, Autor: Autor, Editorial: Editorial});
 
@@ -48,17 +43,15 @@ async function getGenre(url){
         console.log(cleanedIsb);
 
 
-
-    await axios({
-
-    method: 'GET',
-    url: link,
-    responseType: 'stream'
-    
+await axios({
+  method: 'GET',
+  url: link,
+  responseType: 'stream'
 }).then(response => {
-    response.data
-    //.pipe(sharp().resize({ width: 700, height: 700 }))
-    .pipe(fs.createWriteStream(`${cleanedIsb}.jpg`));
+  const folderName = `${cleanedIsb}`;
+  const filePath = `./${folderName}/${cleanedIsb}.jpg`; // Ruta completa del archivo
+  fs.mkdirSync(folderName, { recursive: true }); // Crear la carpeta si no existe
+  response.data.pipe(fs.createWriteStream(filePath));
 });
 
 const csvWriter = createCsvWriter({
